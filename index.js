@@ -1,9 +1,10 @@
+
 const state = {
     taskList : [],
 };
 
-const taskContents = document.querySelector("task__contents");
-const taskModal = document.querySelector("task__modal__body");
+const taskContents = document.querySelector(".task__contents");
+const taskModal = document.querySelector(".task__modal__body");
 
 // Template for card on the screen
 // element identifier 'key=${id}' missing on line 12th
@@ -11,28 +12,30 @@ const htmlTaskContent = ({id,title,description,type,url}) => `
     <div class="mt-3 col-md-6 col-lg-4" id=${id} >
         <div class="card shadow task__card" >
             <div class="card-header d-flex justify-content-end task__card__header">
-                <button type="button" class="btn btn-outline-primary mr-2" name=${id}>
+                <button type="button" class="btn btn-outline-dark mx-1" name=${id}>
                     <i class="fa-solid fa-pencil" name=${id}></i>
                 </button>
-                <button type="button" class="btn btn-outline-danger mr-2" name=${id}>
+                <button type="button" class="btn btn-outline-danger mx-1" name=${id}>
                     <i class="fa-solid fa-trash" name=${id}></i>
                 </button>
             </div>
 
             <div class="card-body">
                 ${
-                    url &&
-                    `<img class="card-img-top md-3 rounded" width="100%" src=${url} alt="card image">`
+                    url 
+                     ?`<img class="card-img-top md-3 rounded" width="100%" src=${url} alt="card image">`
+                     :`<img class="card-img-top md-3 rounded" width="100%" src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png" alt="card image">`
+                    
                 }
                 <h4 class="card-title task__card__title">${title}</h4>
-                <p class="task__card__description trim-3-lines text-muted">${description}</p>
+                <p class="task__card__description trim-2-lines text-muted">${description}</p>
                 <div class="tags text-white d-flex flex-wrap">
                     <sapn class="badge rounded bg-primary">${type}</sapn>
                 </div>
             </div>
 
             <div class="card-footer">
-                <button type="button" class="btn btn-outline-primary float-right" data-bs-toggle="modal" data-bs-target="#openTaskModal">Open Task</button>
+                <button type="button" class="btn btn-outline-primary float-right" data-bs-toggle="modal" data-bs-target="#openTaskModal" onclick="openTask()" id=${id}>Open Task</button>
             </div>
         </div>
     </div>
@@ -44,8 +47,10 @@ const htmlModalContent = ({id, title, description, url}) => {
     return `
     <div id=${id}>
         ${
-            url &&
-            `<img class="img-fluid place__holder__img mb-3" width="100%" src=${url} alt="card image">`
+            url 
+            ?`<img class="card-img-top md-3 rounded" width="100%" src=${url} alt="card image">`
+            :`<img class="card-img-top md-3 rounded" width="100%" src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png" alt="card image">`
+            
         }
         <strong class="text-muted text-sm"> Created on : ${date.toDateString()}</strong>
         <h2 class="my-3">${title}</h2>
@@ -65,8 +70,11 @@ const updateLocalStorage = () =>{
 };
 
 const loadInitialData = () => {
-    const localStorageCopy = JSON.parse(localStorage.task);        // String -> JSON
-    if(localStorageCopy) state.taskList = localStorageCopy.task;
+    if (localStorage.task){
+        const localStorageCopy = JSON.parse(localStorage.task);        // String -> JSON
+        // if(localStorageCopy) state.taskList = localStorageCopy.tasks;
+        state.taskList = localStorageCopy.tasks;
+    }
 
     state.taskList.map((cardData) => {
         taskContents.insertAdjacentHTML("beforeend", htmlTaskContent(cardData));
@@ -92,9 +100,17 @@ const handleSubmit = (event) =>{
         description : document.getElementById('taskDescriptionInput').value,
     };
     if(input.title === "" || input.tags === "" || input.description === ""){
-        return alert("Please fill necessary fields ");
+        return alert("Please fill necessary fields :) ");
     }
-    taskContents.insertAdjacentElement("beforeend",htmlTaskContent({...input, id}));
+    taskContents.insertAdjacentHTML("beforeend",htmlTaskContent({...input, id}));
     state.taskList.push({...input, id});
     updateLocalStorage();
+};
+
+const openTask = (e) => {
+    if(!e) e = window.event;
+
+    const getTask = state.taskList.find(({id}) => id === e.target.id);
+    taskModal.innerHTML = htmlModalContent(getTask);
+
 };

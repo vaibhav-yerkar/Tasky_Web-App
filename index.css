@@ -6,3 +6,10 @@
 body{
     background-color: rgba(213, 247, 189, 0.187) !important;
 }
+
+.trim-2-lines{
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
