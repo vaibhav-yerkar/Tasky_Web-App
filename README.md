@@ -4,3 +4,4 @@ This Web App save the task with input - task image, task title, task type & task
 One can Create a new Task, search for previous task and can modify the previous tasks.
 
 This project use Bootstrap, CSS, JS, HTML, Modals.
+Here, we use browser's local storage to store the Task's/User-input Data
