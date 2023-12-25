@@ -2,11 +2,11 @@ const state = {
     taskList : [],
 };
 
-// DOM Operations
 const taskContents = document.querySelector("task__contents");
 const taskModal = document.querySelector("task__modal__body");
 
 // Template for card on the screen
+// element identifier 'key=${id}' missing on line 12th
 const htmlTaskContent = ({id,title,description,type,url}) => `
     <div class="mt-3 col-md-6 col-lg-4" id=${id} >
         <div class="card shadow task__card" >
@@ -37,3 +37,64 @@ const htmlTaskContent = ({id,title,description,type,url}) => `
         </div>
     </div>
 `;
+
+// Open-Task Modal Body
+const htmlModalContent = ({id, title, description, url}) => {
+    const date = new Date(parseInt(id));
+    return `
+    <div id=${id}>
+        ${
+            url &&
+            `<img class="img-fluid place__holder__img mb-3" width="100%" src=${url} alt="card image">`
+        }
+        <strong class="text-muted text-sm"> Created on : ${date.toDateString()}</strong>
+        <h2 class="my-3">${title}</h2>
+        <p class="text-muted">${description}</p>
+    </div>
+
+    `;
+};
+
+const updateLocalStorage = () =>{
+    localStorage.setItem(
+        "task",
+        JSON.stringify({                                            // JSON -> String
+            tasks : state.taskList,
+        })
+    );
+};
+
+const loadInitialData = () => {
+    const localStorageCopy = JSON.parse(localStorage.task);        // String -> JSON
+    if(localStorageCopy) state.taskList = localStorageCopy.task;
+
+    state.taskList.map((cardData) => {
+        taskContents.insertAdjacentHTML("beforeend", htmlTaskContent(cardData));
+    });
+};
+
+// Spread Operator :
+/**
+    var object_1 = {key : value}
+    var object_2 = {object_1}
+    console.log (object_2) =>       {{key : value}}  
+
+    var object_3 = {...object1}
+    console.log (object_3) =>       {key : value}
+*/
+
+const handleSubmit = (event) =>{
+    const id = `${Date.now()}`;
+    const input = {
+        url : document.getElementById('taskImageInput').value,
+        title : document.getElementById('taskTitleInput').value,
+        tags : document.getElementById('tags').value,
+        description : document.getElementById('taskDescriptionInput').value,
+    };
+    if(input.title === "" || input.tags === "" || input.description === ""){
+        return alert("Please fill necessary fields ");
+    }
+    taskContents.insertAdjacentElement("beforeend",htmlTaskContent({...input, id}));
+    state.taskList.push({...input, id});
+    updateLocalStorage();
+};
