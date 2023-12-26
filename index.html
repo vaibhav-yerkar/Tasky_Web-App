@@ -48,6 +48,10 @@
                     <div class="mb-3">
                         <label class="form-label" for="tags">Task Type</label>
                         <input type="text" class="form-control" id="tags" placeholder="Task Type" required>
+                        <input type="radio" name="tags_color" class="ms-4 ms-md-5 ms-sm-5 my-3" value="bg-primary" checked><i class="fa-regular fa-circle mx-2 bg-primary rounded-circle" ></i>
+                        <input type="radio" name="tags_color" class="ms-4 ms-md-5 ms-sm-5 my-3" value="bg-success"><i class="fa-regular fa-circle mx-2 bg-success rounded-circle"></i>
+                        <input type="radio" name="tags_color" class="ms-4 ms-md-5 ms-sm-5 my-3" value="bg-warning"><i class="fa-regular fa-circle mx-2 bg-warning rounded-circle"></i>
+                        <input type="radio" name="tags_color" class="ms-4 ms-md-5 ms-sm-5 my-3" value="bg-danger"><i class="fa-regular fa-circle mx-2 bg-danger rounded-circle"></i>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="taskDescriptionInput">Task Description</label>
@@ -83,7 +87,7 @@
     </div>
 
     <!-- Navbar  -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow">
+    <nav class="navbar navbar-expand-lg shadow bg-body-tertiary">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">Tasky</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,8 +112,8 @@
             <div class="row justify-content-center">
                 <div class="col-12 col-md-7 col-sm-9">
                     <div class="input-group flex-nowrap shadow rounded">
-                        <input class="form-control" type="search" name="" id="" placeholder="Search your Task Here " aria-label="Search-Task" aria-describedby="addon-wrapping">
-                        <span class="input-group-text" id="addon-wrapping" onclick="searchTask()">
+                        <input class="form-control" type="search" name="" id="" placeholder="Search your Task Here " aria-label="Search-Task" aria-describedby="addon-wrapping" onchange="searchTask()">
+                        <span class="input-group-text" id="addon-wrapping">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </span>
                     </div>
