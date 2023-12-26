@@ -4,7 +4,7 @@
 }
 
 body{
-    background-color: rgba(247, 223, 189, 0.328) !important;
+    background-color: rgba(176, 203, 153, 0.201) !important;
 }
 
 .trim-1-lines{
@@ -12,14 +12,4 @@ body{
     display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
-}
-
-.for_tags_color{
-    width: 1rem;
-    height: 1rem;
-    background-color: aquamarine;
-}
-
-select{
-    font-family: 'FontAwesome';
 }
