@@ -4,7 +4,9 @@ const state = {
 };
 
 const taskContents = document.querySelector(".task__contents");
+console.log(taskContents);
 const taskModal = document.querySelector(".task__modal__body");
+
 
 // Template for card on the screen
 // element identifier 'key=${id}' missing on line 12th
@@ -28,7 +30,7 @@ const htmlTaskContent = ({id,title,description,tags,url, tagColor}) => `
                     
                 }
                 <h4 class="card-title task__card__title">${title}</h4>
-                <p class="task__card__description trim-1-lines text-muted">${description}</p>
+                <p class="task__card__description trim-1-lines text-muted" id=${id}>${description}</p>
                 <div class="tags text-white d-flex flex-wrap">
                     <sapn class="badge rounded ${tagColor}">${tags}</sapn>
                 </div>
@@ -94,6 +96,7 @@ const loadInitialData = () => {
 const handleSubmit = (event) => {
     const id = `${Date.now()}`;
     const tagColor = document.querySelector('input[name="tags_color"]:checked').value;
+
     const input = {
         url : document.getElementById('taskImageInput').value,
         title : document.getElementById('taskTitleInput').value,
@@ -130,6 +133,11 @@ const editTask = (e) => {
     if(!e) e = window.event;
     const taskId = e.target.getAttribute("name");
     const type = e.target.tagName;
+
+    const selectorString = `[id = '${taskId}'].task__card__description`;
+    const descTag = document.querySelector(selectorString);
+    descTag.classList.remove('trim-1-lines');
+
 
     if(type === "BUTTON"){
         parentNode = e.target.parentNode.parentNode;
@@ -184,6 +192,10 @@ const saveTask = (e) => {
     );
     state.taskList = stateCopy;
     updateLocalStorage();
+
+    const selectorString = `[id = '${taskId}'].task__card__description`;
+    const descTag = document.querySelector(selectorString);
+    descTag.classList.add('trim-1-lines');
 
     taskTitle.setAttribute("contenteditable","false");
     taskDescription.setAttribute("contenteditable","false");
