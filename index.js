@@ -8,7 +8,7 @@ const taskModal = document.querySelector(".task__modal__body");
 
 // Template for card on the screen
 // element identifier 'key=${id}' missing on line 12th
-const htmlTaskContent = ({id,title,description,tags,url}) => `
+const htmlTaskContent = ({id,title,description,tags,url, tagColor}) => `
     <div class="mt-3 col-md-6 col-lg-4" id=${id} >
         <div class="card shadow task__card" >
             <div class="card-header d-flex justify-content-end task__card__header">
@@ -30,7 +30,7 @@ const htmlTaskContent = ({id,title,description,tags,url}) => `
                 <h4 class="card-title task__card__title">${title}</h4>
                 <p class="task__card__description trim-1-lines text-muted">${description}</p>
                 <div class="tags text-white d-flex flex-wrap">
-                    <sapn class="badge rounded bg-primary">${tags}</sapn>
+                    <sapn class="badge rounded ${tagColor}">${tags}</sapn>
                 </div>
             </div>
 
@@ -93,10 +93,12 @@ const loadInitialData = () => {
 
 const handleSubmit = (event) => {
     const id = `${Date.now()}`;
+    const tagColor = document.querySelector('input[name="tags_color"]:checked').value;
     const input = {
         url : document.getElementById('taskImageInput').value,
         title : document.getElementById('taskTitleInput').value,
         tags : document.getElementById('tags').value,
+        tagColor : tagColor,
         description : document.getElementById('taskDescriptionInput').value,
     };
     if(input.title === "" || input.tags === "" || input.description === ""){
@@ -166,7 +168,6 @@ const saveTask = (e) => {
         description : taskDescription.innerHTML,
         tags : taskType.innerHTML,
     };
-    console.log(updateData);
 
     let stateCopy = state.taskList;
     
@@ -196,12 +197,13 @@ const saveTask = (e) => {
 
 const searchTask = (e) => {
     if(!e) e = window.event;
+    searchValue = e.target.value;
 
-    while(taskContents.firstchild){
-        taskContents.removeChild(taskContents.firstchild);
-    }
-    const resultData = state.taskList.filter(({title}) => {
-        title.includes(e.target.value)
-    });
+    taskContents.innerHTML=``;
+    const resultData = state.taskList.filter(({title}) => title.includes(searchValue));
     console.log(resultData);
+
+    resultData.map((searchResult) => {
+        taskContents.insertAdjacentHTML("beforeend", htmlTaskContent(searchResult))
+    })
 };
