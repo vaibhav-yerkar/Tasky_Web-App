@@ -8,14 +8,14 @@ const taskModal = document.querySelector(".task__modal__body");
 
 // Template for card on the screen
 // element identifier 'key=${id}' missing on line 12th
-const htmlTaskContent = ({id,title,description,type,url}) => `
+const htmlTaskContent = ({id,title,description,tags,url}) => `
     <div class="mt-3 col-md-6 col-lg-4" id=${id} >
         <div class="card shadow task__card" >
             <div class="card-header d-flex justify-content-end task__card__header">
-                <button type="button" class="btn btn-outline-dark mx-1" name=${id}>
+                <button type="button" class="btn btn-outline-dark mx-1" name=${id} onclick="editTask()">
                     <i class="fa-solid fa-pencil" name=${id}></i>
                 </button>
-                <button type="button" class="btn btn-outline-danger mx-1" name=${id}>
+                <button type="button" class="btn btn-outline-danger mx-1" name=${id} onclick="deleteTask()">
                     <i class="fa-solid fa-trash" name=${id}></i>
                 </button>
             </div>
@@ -28,9 +28,9 @@ const htmlTaskContent = ({id,title,description,type,url}) => `
                     
                 }
                 <h4 class="card-title task__card__title">${title}</h4>
-                <p class="task__card__description trim-2-lines text-muted">${description}</p>
+                <p class="task__card__description trim-1-lines text-muted">${description}</p>
                 <div class="tags text-white d-flex flex-wrap">
-                    <sapn class="badge rounded bg-primary">${type}</sapn>
+                    <sapn class="badge rounded bg-primary">${tags}</sapn>
                 </div>
             </div>
 
@@ -60,7 +60,7 @@ const htmlModalContent = ({id, title, description, url}) => {
     `;
 };
 
-const updateLocalStorage = () =>{
+const updateLocalStorage = () => {
     localStorage.setItem(
         "task",
         JSON.stringify({                                            // JSON -> String
@@ -91,7 +91,7 @@ const loadInitialData = () => {
     console.log (object_3) =>       {key : value}
 */
 
-const handleSubmit = (event) =>{
+const handleSubmit = (event) => {
     const id = `${Date.now()}`;
     const input = {
         url : document.getElementById('taskImageInput').value,
@@ -110,7 +110,98 @@ const handleSubmit = (event) =>{
 const openTask = (e) => {
     if(!e) e = window.event;
 
-    const getTask = state.taskList.find(({id}) => id === e.target.id);
+    const getTask = state.taskList.find((task) => task.id === e.target.id);
     taskModal.innerHTML = htmlModalContent(getTask);
 
+};
+
+const deleteTask = (e) => {
+    if(!e) e = window.event;
+    const taskId = e.target.getAttribute("name");
+
+    state.taskList = state.taskList.filter(({id}) => id!=taskId);
+    updateLocalStorage();
+    taskContents.removeChild(document.getElementById(taskId));
+};
+
+const editTask = (e) => {
+    if(!e) e = window.event;
+    const taskId = e.target.getAttribute("name");
+    const type = e.target.tagName;
+
+    if(type === "BUTTON"){
+        parentNode = e.target.parentNode.parentNode;
+    }else{
+        parentNode = e.target.parentNode.parentNode.parentNode;
+    }
+
+    const taskTitle = parentNode.childNodes[3].childNodes[3];
+    const taskDescription = parentNode.childNodes[3].childNodes[5];
+    const taskType = parentNode.childNodes[3].childNodes[7].childNodes[1];
+    const submitButton = parentNode.childNodes[5].childNodes[1];
+
+    taskTitle.setAttribute("contenteditable","true");
+    taskDescription.setAttribute("contenteditable","true");
+    taskType.setAttribute("contenteditable","true");
+
+    submitButton.removeAttribute('data-bs-target');
+    submitButton.removeAttribute('data-bs-toggle');
+    submitButton.setAttribute('onclick',"saveTask()");
+    submitButton.innerHTML = 'Save Changes';
+};
+
+const saveTask = (e) => {
+    if(!e) e = window.event;
+    const taskId = e.target.id;
+
+    const parentNode = e.target.parentNode.parentNode;
+
+    const taskTitle = parentNode.childNodes[3].childNodes[3];
+    const taskDescription = parentNode.childNodes[3].childNodes[5];
+    const taskType = parentNode.childNodes[3].childNodes[7].childNodes[1];
+    const submitButton = parentNode.childNodes[5].childNodes[1];
+
+    updateData = {
+        title : taskTitle.innerHTML,
+        description : taskDescription.innerHTML,
+        tags : taskType.innerHTML,
+    };
+    console.log(updateData);
+
+    let stateCopy = state.taskList;
+    
+    stateCopy = stateCopy.map((task)=> 
+        task.id === taskId
+         ?{
+            id : task.id,
+            title : updateData.title,
+            description : updateData.description,
+            tags : updateData.tags,
+            url : task.url,
+         }
+        : task
+    );
+    state.taskList = stateCopy;
+    updateLocalStorage();
+
+    taskTitle.setAttribute("contenteditable","false");
+    taskDescription.setAttribute("contenteditable","false");
+    taskType.setAttribute("contenteditable","false");
+
+    submitButton.setAttribute('onclick',"openTask()");
+    submitButton.setAttribute('data-bs-target','#openTaskModal');
+    submitButton.setAttribute('data-bs-toggle','modal');
+    submitButton.innerHTML = 'Open Task';
+};
+
+const searchTask = (e) => {
+    if(!e) e = window.event;
+
+    while(taskContents.firstchild){
+        taskContents.removeChild(taskContents.firstchild);
+    }
+    const resultData = state.taskList.filter(({title}) => {
+        title.includes(e.target.value)
+    });
+    console.log(resultData);
 };
