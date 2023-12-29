@@ -4,7 +4,6 @@ const state = {
 };
 
 const taskContents = document.querySelector(".task__contents");
-console.log(taskContents);
 const taskModal = document.querySelector(".task__modal__body");
 
 
@@ -81,6 +80,7 @@ const loadInitialData = () => {
     state.taskList.map((cardData) => {
         taskContents.insertAdjacentHTML("beforeend", htmlTaskContent(cardData));
     });
+
 };
 
 // Spread Operator :
@@ -102,7 +102,7 @@ const handleSubmit = (event) => {
         title : document.getElementById('taskTitleInput').value,
         tags : document.getElementById('tags').value,
         tagColor : tagColor,
-        description : document.getElementById('taskDescriptionInput').value,
+        description : document.getElementById('taskDescriptionInput').value.replace(/\n/g,"<br>"),
     };
     if(input.title === "" || input.tags === "" || input.description === ""){
         return alert("Please fill necessary fields :) ");
