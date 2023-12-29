@@ -187,6 +187,7 @@ const saveTask = (e) => {
             title : updateData.title,
             description : updateData.description,
             tags : updateData.tags,
+            tagColor : task.tagColor,
             url : task.url,
          }
         : task
