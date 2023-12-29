@@ -79,6 +79,7 @@ const loadInitialData = () => {
 
     state.taskList.map((cardData) => {
         taskContents.insertAdjacentHTML("beforeend", htmlTaskContent(cardData));
+        console.log(cardData);
     });
 
 };
@@ -102,7 +103,7 @@ const handleSubmit = (event) => {
         title : document.getElementById('taskTitleInput').value,
         tags : document.getElementById('tags').value,
         tagColor : tagColor,
-        description : document.getElementById('taskDescriptionInput').value.replace(/\n/g,"<br>"),
+        description : document.getElementById('taskDescriptionInput').value,
     };
     if(input.title === "" || input.tags === "" || input.description === ""){
         return alert("Please fill necessary fields :) ");
