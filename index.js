@@ -213,7 +213,6 @@ const searchTask = (e) => {
 
     taskContents.innerHTML=``;
     const resultData = state.taskList.filter(({title}) => title.includes(searchValue));
-    console.log(resultData);
 
     resultData.map((searchResult) => {
         taskContents.insertAdjacentHTML("beforeend", htmlTaskContent(searchResult))
