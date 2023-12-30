@@ -79,7 +79,6 @@ const loadInitialData = () => {
 
     state.taskList.map((cardData) => {
         taskContents.insertAdjacentHTML("beforeend", htmlTaskContent(cardData));
-        console.log(cardData);
     });
 
 };
@@ -103,7 +102,7 @@ const handleSubmit = (event) => {
         title : document.getElementById('taskTitleInput').value,
         tags : document.getElementById('tags').value,
         tagColor : tagColor,
-        description : document.getElementById('taskDescriptionInput').value,
+        description : document.getElementById('taskDescriptionInput').value.replace(/\n/g,"<br>"),
     };
     if(input.title === "" || input.tags === "" || input.description === ""){
         return alert("Please fill necessary fields :) ");
@@ -159,6 +158,7 @@ const editTask = (e) => {
     submitButton.removeAttribute('data-bs-toggle');
     submitButton.setAttribute('onclick',"saveTask()");
     submitButton.innerHTML = 'Save Changes';
+
 };
 
 const saveTask = (e) => {
@@ -174,7 +174,7 @@ const saveTask = (e) => {
 
     updateData = {
         title : taskTitle.innerHTML,
-        description : taskDescription.innerHTML,
+        description : taskDescription.innerHTML.replace(/<div>/g, '<br>').replace(/<\/div>/g, ''),
         tags : taskType.innerHTML,
     };
 
