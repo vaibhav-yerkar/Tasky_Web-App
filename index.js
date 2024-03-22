@@ -24,8 +24,8 @@ const htmlTaskContent = ({id,title,description,tags,url, tagColor}) => `
             <div class="card-body">
                 ${
                     url 
-                     ?`<img class="card-img-top md-3 rounded" width="100%" src=${url} alt="card image">`
-                     :`<img class="card-img-top md-3 rounded" width="100%" src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png" alt="card image">`
+                    ?`<img class="card-img-top md-3 rounded" width="100%" src=${url} alt="card image">`
+                    :`<img class="card-img-top md-3 rounded" width="100%" src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png" alt="card image">`
                     
                 }
                 <h4 class="card-title task__card__title">${title}</h4>

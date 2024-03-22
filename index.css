@@ -6,6 +6,29 @@
 body{
     background-color: rgba(176, 203, 153, 0.201) !important;
 }
+input[type="radio"]{
+    appearance: none; /* Hide the default radio button */
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid #ccc; /* Border color */
+    outline: none;
+    cursor: pointer;
+    transform: translate(0%,100%);
+    margin-right: 0.2rem;
+}
+.rb-danger:checked{
+    background-color: red;
+}
+.rb-warning:checked{
+    background-color: orange;
+}
+.rb-success:checked{
+    background-color: green;
+}
+.rb-primary:checked{
+    background-color: blue;
+}
 
 .trim-1-lines{
     -webkit-line-clamp: 1;
